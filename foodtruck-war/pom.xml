@@ -16,11 +16,6 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>foodtruck_data</groupId>
-			<artifactId>foodtruck_data</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
 			<groupId>foodtruck_service</groupId>
 			<artifactId>foodtruck_service</artifactId>
 			<version>1.0</version>
