@@ -1,0 +1,31 @@
+target/
+*.class
+*.classpath
+*/target/
+.metadata/
+bin/
+*/test-output/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.tgz
+
+# eclipse files #
+.project
+.settings
+*/.project
+*/.settings
+*/.classpath
+*/bin
+
+# IDEA specific
+.idea
+*.iml
+
+# Functional test files #
+*/tmp/*
+
+# Any Diff files
+*diff

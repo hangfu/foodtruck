@@ -1,0 +1,67 @@
+/* for extend the map to 100% */
+html {
+	height: 100%;
+}
+
+body {
+	background-color: #070716;
+	color: #e6e6e6;
+	font-family: ff-clan-web-pro-wide,sans-serif;
+	height: 100%;
+}
+
+/* general content */
+.content {
+	height: 100%;
+}
+
+/* map view */
+.content #map-canvas {
+	height: 100%;
+	width: 100%;
+	margin: 0 auto;
+	color: #000000;
+}
+/* controls */
+.controls {
+	margin-top: 16px;
+	border: 1px solid transparent;
+	border-radius: 2px 0 0 2px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	height: 32px;
+	outline: none;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+#map-input {
+	background-color: #fff;
+	padding: 0 11px 0 13px;
+	width: 400px;
+	font-family: Roboto;
+	font-size: 15px;
+	font-weight: 300;
+	text-overflow: ellipsis;
+}
+#map-input:focus {
+	border-color: #4d90fe;
+	margin-left: -1px;
+	padding-left: 14px;  /* Regular padding-left + 1. */
+	width: 401px;
+}
+/* info window */
+#map-canvas .place-name {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+#map-canvas .more-details {
+	margin-top: 0;
+	margin-bottom: 5px;
+}
+#map-canvas .more-details.open {
+	color: #5fb336;
+	font-weight: 400;
+}
+#map-canvas .more-details.close {
+	color: #FF6A6A;
+	font-weight: 400;
+}

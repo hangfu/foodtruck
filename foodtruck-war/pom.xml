@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>foodtruck_webservice</groupId>
+	<artifactId>foodtruck</artifactId>
+	<packaging>war</packaging>
+
+	<parent>
+		<groupId>foodtruck</groupId>
+		<artifactId>foodtruck</artifactId>
+		<version>1.0</version>
+	</parent>
+
+	<build>
+		<finalName>foodtruck</finalName>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>foodtruck_data</groupId>
+			<artifactId>foodtruck_data</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>foodtruck_service</groupId>
+			<artifactId>foodtruck_service</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>foodtruck_impl</groupId>
+			<artifactId>foodtruck_impl</artifactId>
+			<version>1.0</version>
+		</dependency>
+	</dependencies>
+</project>

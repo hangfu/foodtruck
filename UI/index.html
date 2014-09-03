@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<title>SF Food Truck</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB91UYK1_B9psX3rfA7m39iGxcSeOBVkXM&libraries=places"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+</head>
+
+<body>
+	<header>
+		<h1>SF Food Truck</h1>
+	</header>
+	
+
+	<section class="content">
+		<input id="map-input" class="controls" type="text" placeholder="Search">
+		<div id="map-canvas">
+		</div>
+	</section>
+
+	<section class="advanced-search">
+		<form action="">
+			<fieldset>
+				<legend>Type of Food</legend>
+				<input type="checkbox" name="food_type" value="Burger" id="burger">
+				<label for="burger">Burger</label>
+				<input type="checkbox" name="food_type" value="Sandwich" id="sandwich">
+				<label for="sandwich">Sandwich</label>
+				<input type="checkbox" name="food_type" value="Noodle" id="noodle">
+				<label for="noodle">Noodle</label>
+				<input type="checkbox" name="food_type" value="Cake" id="cake">
+				<label for="cake">Cake</label>
+				<input type="checkbox" name="food_type" value="Drink" id="drink">
+				<label for="drink">Drink</label>
+			</fieldset>
+		</form>
+	</section>
+
+</body>
+</html>

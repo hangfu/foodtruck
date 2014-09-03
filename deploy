@@ -1,0 +1,8 @@
+# /bin/bash
+
+mvn clean install
+rm -fr ~/Desktop/tomcat/webapps/foodtruck
+cp -r foodtruck-war/target/foodtruck ~/Desktop/tomcat/webapps/
+cp foodtruck-war/target/foodtruck.war ~/Desktop/tomcat/webapps/
+cp UI/* ~/Desktop/tomcat/webapps/foodtruck 
+tomcat restart
