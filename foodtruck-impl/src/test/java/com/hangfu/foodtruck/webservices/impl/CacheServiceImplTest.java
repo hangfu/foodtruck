@@ -65,11 +65,13 @@ public class CacheServiceImplTest extends PowerMockTestCase {
 		assertTrue(foodTruckDTOCache.containsIndex("Cupkates Bakery, LLC|50 01ST ST"));
 		assertTrue(foodTruckDTOCache.containsIndex("Cheese Gone Wild|400 HOWARD ST"));
 
-		assertEquals(foodTypeCache.size(), 2);
+		assertEquals(foodTypeCache.size(), 3);
 		assertTrue(foodTypeCache.containsIndex("DRINK"));
 		assertTrue(foodTypeCache.containsIndex("SANDWICH"));
+		assertTrue(foodTypeCache.containsIndex("GRILL"));
 		assertEquals(foodTypeCache.get("DRINK").size(), 1);
 		assertEquals(foodTypeCache.get("SANDWICH").size(), 2);
+		assertEquals(foodTypeCache.get("GRILL").size(), 1);
 	}
 
 	private String buildJsonData() {

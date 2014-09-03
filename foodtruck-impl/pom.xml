@@ -14,21 +14,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>foodtruck_cache</groupId>
-			<artifactId>foodtruck_cache</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>foodtruck_data</groupId>
-			<artifactId>foodtruck_data</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>foodtruck_thread</groupId>
-			<artifactId>foodtruck_thread</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
 			<groupId>foodtruck_service</groupId>
 			<artifactId>foodtruck_service</artifactId>
 			<version>1.0</version>

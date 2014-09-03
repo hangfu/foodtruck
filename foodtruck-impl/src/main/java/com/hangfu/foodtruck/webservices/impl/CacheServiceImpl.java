@@ -93,12 +93,20 @@ public class CacheServiceImpl implements CacheService {
 
 		JSONArray array = new JSONArray(dataSFResponse);
 		log.info(array.length() + " food truck records from DataSF");
+		int count = 0;
 		for (int i = 0; i < array.length(); i++) {
 			JSONObject element = array.getJSONObject(i);
+			// filter out invalid records
 			if (!"APPROVED".equals(element.getString("status"))) {
 				continue;
 			}
 			FoodTruckDTO dto = new FoodTruckDTO(element);
+			// filter out invalid geo location
+			if (dto.getLatitude() == null || dto.getLongitude() == 0 || dto.getLongitude() == null
+					|| dto.getLongitude() == 0) {
+				count++;
+				continue;
+			}
 			String idx = foodTruckDTOCache.getIndex(dto.getName(), dto.getAddress());
 			// add data into foodTruckDTOCache
 			foodTruckDTOCache.put(idx, dto);
@@ -108,6 +116,7 @@ public class CacheServiceImpl implements CacheService {
 				foodTypeCache.add(type.name(), dto);
 			}
 		}
+		log.info("count = " + count);
 		log.info(foodTruckDTOCache.size() + " approved foodtrucks cached in total");
 	}
 

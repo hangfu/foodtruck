@@ -1,5 +1,7 @@
 package com.hangfu.foodtruck.webservices.service;
 
+import java.util.List;
+
 import com.hangfu.foodtruck.webservices.response.FoodTruckResponse;
 
 /**
@@ -7,5 +9,5 @@ import com.hangfu.foodtruck.webservices.response.FoodTruckResponse;
  * 
  */
 public interface FoodTruckService {
-	public FoodTruckResponse getFoodTrucks();
+	public FoodTruckResponse getFoodTrucks(List<String> type);
 }

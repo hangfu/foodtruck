@@ -2,16 +2,19 @@
 
 	var map;
 	var infowindow;
+	var foodtruckMarkers = [];
+
 
 	$.ajax({
 		url: "http://localhost:8080/foodtruck/v1/foodtruck/",
 		type: "GET",
-		success: initialize
+		success: load
 	});
 
-	function initialize(data) {
+	function load(data) {
 
 		var markers = [];
+
 		var center = new google.maps.LatLng(37.7671996,-122.4243821);
 		var mapOptions = {
 			zoom: 12,
@@ -29,6 +32,7 @@
 				position: foodtruckPos,
 				icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
 			});
+			foodtruckMarkers.push(foodtruckMarker);
 			bounds.extend(foodtruckPos);
 
 			// set place details
@@ -118,10 +122,86 @@
 			var bounds = map.getBounds();
 			sesarchBox.setBounds(bounds);
 		});
+
+
+		var types = $('.food-type');
+		$('.food-type').attr("checked", true);
+		types.click(function() {
+			var query = '';
+
+			for (var i=0; i<types.length; i++) {
+				if(types.get(i).checked) {
+					if(query !== '') {
+						query = query + '&type=' + types.get(i).value;
+					} else {
+						query = types.get(i).value;
+					}
+				}
+			}
+
+			if(query !== '') {
+				query = "http://localhost:8080/foodtruck/v1/foodtruck/?type=" + query;
+				
+				$.ajax({
+					url: query,
+					type: "GET",
+					success: updateFoodtruckMarkers
+				});
+			} else {
+				for (var i = 0, marker; marker = foodtruckMarkers[i]; i++) {
+					marker.setMap(null);
+				}
+			}
+
+			function updateFoodtruckMarkers(data) {
+				for (var i = 0, marker; marker = foodtruckMarkers[i]; i++) {
+					marker.setMap(null);
+				}
+				foodtruckMarkers = [];
+
+				var foodtruckData = data.result.data;
+
+				for (var i=0; i<foodtruckData.length; i++) {
+					var foodtruckPos = new google.maps.LatLng(foodtruckData[i].latitude, foodtruckData[i].longitude);
+					var foodtruckMarker = new google.maps.Marker({
+						map: map,
+						position: foodtruckPos,
+						icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+					});
+					foodtruckMarkers.push(foodtruckMarker);
+
+					// set place details
+					var contentString = "<h4 class=\"place-name\">" + foodtruckData[i].name + "</h4>" + 
+										"<p class=\"more-details\">" + foodtruckData[i].address + "</p>" + 
+										"<p class=\"more-details\">" + foodtruckData[i].foodTypes + "</p>" + 
+										"<p class=\"more-details\">" + foodtruckData[i].foodItems + "</p>" + 
+										"<a href=\"" + foodtruckData[i].schedule + "\">schedule</a>";
+					
+
+					// set info window
+					google.maps.event.addListener(foodtruckMarker, 'click', function(content, mark, map) {
+						return function() {
+							if(infowindow) infowindow.close();
+							infowindow = new google.maps.InfoWindow({
+								content: content,
+								maxWidth: 200
+							});
+
+							infowindow.open(map, mark);
+						};
+					}(contentString, foodtruckMarker, map));
+				}
+
+
+
+			}
+
+		});
+
+
 	}
-
-
-
 	
+
+
 	
 }($));

@@ -3,7 +3,7 @@
  */
 package com.hangfu.foodtruck.webservices.response;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -16,13 +16,13 @@ import com.hangfu.foodtruck.webservices.dto.FoodTruckDTO;
 @XmlRootElement(name = "result")
 public class FoodTruckResponse extends BaseResponse {
 
-	private List<FoodTruckDTO> data;
+	private Set<FoodTruckDTO> data;
 
-	public List<FoodTruckDTO> getData() {
+	public Set<FoodTruckDTO> getData() {
 		return data;
 	}
 
-	public void setData(List<FoodTruckDTO> data) {
+	public void setData(Set<FoodTruckDTO> data) {
 		this.data = data;
 	}
 
