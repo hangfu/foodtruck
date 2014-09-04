@@ -4,9 +4,8 @@
 	var infowindow;
 	var foodtruckMarkers = [];
 
-
 	$.ajax({
-		url: "/foodtruck/foodtruck/",
+		url: "/foodtruck/foodtruck/foodtruck",
 		type: "GET",
 		success: load
 	});
@@ -125,9 +124,12 @@
 
 
 		var types = $('.food-type');
-		$('.food-type').attr("checked", true);
+		$('.food-type').prop("checked", true);
+		$('.all-type').prop("checked", true);
+
 		types.click(function() {
 			var query = '';
+			var allChecked = true;
 
 			for (var i=0; i<types.length; i++) {
 				if(types.get(i).checked) {
@@ -136,11 +138,19 @@
 					} else {
 						query = types.get(i).value;
 					}
+				} else {
+					allChecked = false;
 				}
 			}
 
+			if(allChecked) {
+				$('.all-type').prop("checked", true);
+			} else {
+				$('.all-type').prop("checked", false);
+			}
+
 			if(query !== '') {
-				query = "/foodtruck/foodtruck/?type=" + query;
+				query = "/foodtruck/foodtruck/foodtruck/?type=" + query;
 				
 				$.ajax({
 					url: query,
@@ -153,51 +163,88 @@
 				}
 			}
 
-			function updateFoodtruckMarkers(data) {
+
+			
+		});
+
+		function updateFoodtruckMarkers(data) {
+			for (var i = 0, marker; marker = foodtruckMarkers[i]; i++) {
+				marker.setMap(null);
+			}
+			foodtruckMarkers = [];
+
+			var foodtruckData = data.result.data;
+
+			for (var i=0; i<foodtruckData.length; i++) {
+				var foodtruckPos = new google.maps.LatLng(foodtruckData[i].latitude, foodtruckData[i].longitude);
+				var foodtruckMarker = new google.maps.Marker({
+					map: map,
+					position: foodtruckPos,
+					icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+				});
+				foodtruckMarkers.push(foodtruckMarker);
+
+				// set place details
+				var contentString = "<h4 class=\"place-name\">" + foodtruckData[i].name + "</h4>" + 
+									"<p class=\"more-details\">" + foodtruckData[i].address + "</p>" + 
+									"<p class=\"more-details\">" + foodtruckData[i].foodTypes + "</p>" + 
+									"<p class=\"more-details\">" + foodtruckData[i].foodItems + "</p>" + 
+									"<a href=\"" + foodtruckData[i].schedule + "\">schedule</a>";
+				
+
+				// set info window
+				google.maps.event.addListener(foodtruckMarker, 'click', function(content, mark, map) {
+					return function() {
+						if(infowindow) infowindow.close();
+						infowindow = new google.maps.InfoWindow({
+							content: content,
+							maxWidth: 200
+						});
+
+						infowindow.open(map, mark);
+					};
+				}(contentString, foodtruckMarker, map));
+			}
+
+
+
+		}
+
+
+
+		$('.all-type').click(function() {
+			var query = '';
+
+			if ($('.all-type').prop("checked")) {
+				$('.food-type').prop("checked", true);
+
+				for (var i=0; i<types.length; i++) {
+					if (i === types.length-1) {
+						query = query + types.get(i).value;
+					} else {
+						query = query + types.get(i).value + "&type=";
+					}
+				}	
+			} else {
+				$('.food-type').prop("checked", false);
+			}
+
+			if (query !== '') {
+				query = "/foodtruck/foodtruck/foodtruck/?type=" + query;
+				
+				$.ajax({
+					url: query,
+					type: "GET",
+					success: updateFoodtruckMarkers
+				});
+			} else {
 				for (var i = 0, marker; marker = foodtruckMarkers[i]; i++) {
 					marker.setMap(null);
 				}
-				foodtruckMarkers = [];
-
-				var foodtruckData = data.result.data;
-
-				for (var i=0; i<foodtruckData.length; i++) {
-					var foodtruckPos = new google.maps.LatLng(foodtruckData[i].latitude, foodtruckData[i].longitude);
-					var foodtruckMarker = new google.maps.Marker({
-						map: map,
-						position: foodtruckPos,
-						icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-					});
-					foodtruckMarkers.push(foodtruckMarker);
-
-					// set place details
-					var contentString = "<h4 class=\"place-name\">" + foodtruckData[i].name + "</h4>" + 
-										"<p class=\"more-details\">" + foodtruckData[i].address + "</p>" + 
-										"<p class=\"more-details\">" + foodtruckData[i].foodTypes + "</p>" + 
-										"<p class=\"more-details\">" + foodtruckData[i].foodItems + "</p>" + 
-										"<a href=\"" + foodtruckData[i].schedule + "\">schedule</a>";
-					
-
-					// set info window
-					google.maps.event.addListener(foodtruckMarker, 'click', function(content, mark, map) {
-						return function() {
-							if(infowindow) infowindow.close();
-							infowindow = new google.maps.InfoWindow({
-								content: content,
-								maxWidth: 200
-							});
-
-							infowindow.open(map, mark);
-						};
-					}(contentString, foodtruckMarker, map));
-				}
-
-
-
 			}
 
-		});
 
+		});
 
 	}
 	
