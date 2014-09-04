@@ -6,7 +6,7 @@
 
 
 	$.ajax({
-		url: "/foodtruck/",
+		url: "/foodtruck/foodtruck/",
 		type: "GET",
 		success: load
 	});
@@ -140,7 +140,7 @@
 			}
 
 			if(query !== '') {
-				query = "/foodtruck/?type=" + query;
+				query = "/foodtruck/foodtruck/?type=" + query;
 				
 				$.ajax({
 					url: query,
