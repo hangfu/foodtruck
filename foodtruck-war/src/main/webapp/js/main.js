@@ -6,7 +6,7 @@
 
 
 	$.ajax({
-		url: "//foodtruck/",
+		url: "/foodtruck/",
 		type: "GET",
 		success: load
 	});

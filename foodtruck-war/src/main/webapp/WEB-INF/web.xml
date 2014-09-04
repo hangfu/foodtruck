@@ -15,6 +15,10 @@
   		<listener-class>com.hangfu.foodtruck.webservices.cache.CacheRefreshJobListener</listener-class>
  	</listener>
 
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+    
 	<servlet>
 		<servlet-name>jersey-spring</servlet-name>
 		<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
