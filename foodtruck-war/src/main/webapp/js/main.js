@@ -6,7 +6,7 @@
 
 
 	$.ajax({
-		url: "http://localhost:8080/foodtruck/v1/foodtruck/",
+		url: "http://localhost:8080/foodtruck/",
 		type: "GET",
 		success: load
 	});
@@ -140,7 +140,7 @@
 			}
 
 			if(query !== '') {
-				query = "http://localhost:8080/foodtruck/v1/foodtruck/?type=" + query;
+				query = "http://localhost:8080/foodtruck/?type=" + query;
 				
 				$.ajax({
 					url: query,
