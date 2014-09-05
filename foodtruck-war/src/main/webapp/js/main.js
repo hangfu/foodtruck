@@ -210,11 +210,12 @@
 
 		// request data if query is not null
 		if (query === '') {
+			var marker;
 			for (i = 0, marker; marker = foodtruckMarkers[i]; i++) {
 				marker.setMap(null);
 			}
 		} else {
-			query = "/foodtruck/foodtruck/?type=" + query;
+			query = "/foodtruck/foodtruck?type=" + query;
 
 			$.ajax({
 				url: query,
