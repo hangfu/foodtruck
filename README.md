@@ -52,6 +52,8 @@ More thorough functional tests
 
 Build response layer cache to boost performance
 
+More accurate method to classify food types
+
 
 About me
 -----------
