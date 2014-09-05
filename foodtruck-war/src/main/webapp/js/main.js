@@ -115,7 +115,7 @@
 		if ((failureCount === 0) && data.result.operationResult === "Failure") {
 			failureCount++;
 			$.ajax({
-				url: "/foodtruck/foodtruck/foodtruck",
+				url: "/foodtruck/foodtruck",
 				type: "GET",
 				success: loadFoodtruckData
 			});
