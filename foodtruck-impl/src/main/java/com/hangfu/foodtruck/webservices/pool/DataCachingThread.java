@@ -29,7 +29,7 @@ public class DataCachingThread extends TimerTask {
 	public void run() {
 		log.info("DataCachingThread.run() invoked at " + new Date());
 
-		cacheService.buildCache(null, null, null);
+		cacheService.buildCache();
 	}
 
 	public void setCacheService(CacheService cacheService) {

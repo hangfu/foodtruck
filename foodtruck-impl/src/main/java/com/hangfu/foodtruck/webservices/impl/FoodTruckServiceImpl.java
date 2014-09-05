@@ -44,6 +44,11 @@ public class FoodTruckServiceImpl implements FoodTruckService {
 	@Autowired
 	private FoodTypeCache foodTypeCache;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.hangfu.foodtruck.webservices.service.FoodTruckService#getFoodTrucks(java.util.List)
+	 */
 	@Override
 	@GET
 	@Produces("application/json")
@@ -57,7 +62,7 @@ public class FoodTruckServiceImpl implements FoodTruckService {
 		// no type specified, query for all data
 		if (CollectionUtil.isNullOrEmpty(types)) {
 			if (foodTruckDTOCache.getCacheMap() == null || foodTruckDTOCache.size() == 0) {
-				log.info("no data in cache");
+				log.error("no data in cache");
 				response.setOperationResult(OperationResult.Failure);
 				response.addError(ApiError.NO_DATA_ERROR);
 				return response;
@@ -77,8 +82,14 @@ public class FoodTruckServiceImpl implements FoodTruckService {
 		return response;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.hangfu.foodtruck.webservices.service.FoodTruckService#getFoodTypes()
+	 */
+	@Override
 	@GET
-	@Path("foodtypes")
+	@Path("/foodtypes")
 	@Produces("application/json")
 	public List<String> getFoodTypes() {
 		List<String> list = new ArrayList<String>();
@@ -87,4 +98,13 @@ public class FoodTruckServiceImpl implements FoodTruckService {
 		}
 		return list;
 	}
+
+	public void setFoodTruckDTOCache(FoodTruckDTOCache foodTruckDTOCache) {
+		this.foodTruckDTOCache = foodTruckDTOCache;
+	}
+
+	public void setFoodTypeCache(FoodTypeCache foodTypeCache) {
+		this.foodTypeCache = foodTypeCache;
+	}
+
 }

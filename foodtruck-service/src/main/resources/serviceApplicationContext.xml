@@ -13,10 +13,11 @@
 
 	<!-- the cache services -->
 	<bean id="foodTruckDTOCacheMap" class="java.util.HashMap" />
-	<bean id="foodTruckDTOCache" class="com.hangfu.foodtruck.webservices.cache.FoodTruckDTOCache">
+	<bean id="foodTruckDTOCache"
+		class="com.hangfu.foodtruck.webservices.cache.FoodTruckDTOCache">
 		<property name="cacheMap" ref="foodTruckDTOCacheMap"></property>
 	</bean>
-	
+
 	<bean id="foodTypeCacheMap" class="java.util.HashMap" />
 	<bean id="foodTypeCache" class="com.hangfu.foodtruck.webservices.cache.FoodTypeCache">
 		<property name="cacheMap" ref="foodTypeCacheMap"></property>

@@ -9,5 +9,20 @@ import com.hangfu.foodtruck.webservices.response.FoodTruckResponse;
  * 
  */
 public interface FoodTruckService {
-	public FoodTruckResponse getFoodTrucks(List<String> type);
+
+	/**
+	 * given a list of food type, return food trucks belong to that types 
+	 * if no type specified, return all food trucks
+	 * 
+	 * @param types
+	 * @return
+	 */
+	public FoodTruckResponse getFoodTrucks(List<String> types);
+
+	/**
+	 * return all food types defined
+	 * 
+	 * @return
+	 */
+	public List<String> getFoodTypes();
 }

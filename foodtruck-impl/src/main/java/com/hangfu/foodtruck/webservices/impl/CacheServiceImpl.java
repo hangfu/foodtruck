@@ -1,13 +1,10 @@
 package com.hangfu.foodtruck.webservices.impl;
 
 import java.io.IOException;
-import java.net.CacheResponse;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -19,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.hangfu.foodtruck.webservices.cache.FoodTruckDTOCache;
 import com.hangfu.foodtruck.webservices.cache.FoodTypeCache;
+import com.hangfu.foodtruck.webservices.cache.MapCache;
 import com.hangfu.foodtruck.webservices.dto.FoodTruckDTO;
 import com.hangfu.foodtruck.webservices.enums.FoodType;
 import com.hangfu.foodtruck.webservices.enums.OperationResult;
@@ -47,12 +45,16 @@ public class CacheServiceImpl implements CacheService {
 	@Autowired
 	private FoodTypeCache foodTypeCache;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.hangfu.foodtruck.webservices.service.CacheService#buildCache()
+	 */
 	@Override
 	@GET
 	@Path("/build_cache")
 	@Produces("application/json")
-	public BaseResponse buildCache(@HeaderParam("X-YBY-Info") String ybyCookieInfo,
-			@QueryParam("period") Integer cachePeriod, @QueryParam("toDate") String toDate) {
+	public BaseResponse buildCache() {
 
 		BaseResponse response = new BaseResponse();
 		response.setOperationResult(OperationResult.Success);
@@ -69,6 +71,7 @@ public class CacheServiceImpl implements CacheService {
 		}
 
 		if (dataSFResponse == null) {
+			log.error("no response data from DataSF");
 			response.addError(ApiError.QUERY_ERROR);
 			response.setOperationResult(OperationResult.Failure);
 			return response;
@@ -84,16 +87,23 @@ public class CacheServiceImpl implements CacheService {
 		}
 
 		log.info("Completed cache build");
+		logCacheSummary();
+
 		return response;
 	}
 
+	/**
+	 * cache data into foodTruckDTOCache and foodTypeCache
+	 * 
+	 * @param dataSFResponse
+	 * @throws JSONException
+	 */
 	private void cacheData(String dataSFResponse) throws JSONException {
 
-		clearCache(null, null, null, null, null, null, null);
+		clearCache();
 
 		JSONArray array = new JSONArray(dataSFResponse);
 		log.info(array.length() + " food truck records from DataSF");
-		int count = 0;
 		for (int i = 0; i < array.length(); i++) {
 			JSONObject element = array.getJSONObject(i);
 			// filter out invalid records
@@ -101,14 +111,13 @@ public class CacheServiceImpl implements CacheService {
 				continue;
 			}
 			FoodTruckDTO dto = new FoodTruckDTO(element);
-			// filter out invalid geo location
+			// filter out record with invalid geo location
 			if (dto.getLatitude() == null || dto.getLongitude() == 0 || dto.getLongitude() == null
 					|| dto.getLongitude() == 0) {
-				count++;
 				continue;
 			}
-			String idx = foodTruckDTOCache.getIndex(dto.getName(), dto.getAddress());
 			// add data into foodTruckDTOCache
+			String idx = foodTruckDTOCache.getIndex(dto.getName(), dto.getAddress());
 			foodTruckDTOCache.put(idx, dto);
 
 			// add data into foodTypeCache
@@ -116,50 +125,58 @@ public class CacheServiceImpl implements CacheService {
 				foodTypeCache.add(type.name(), dto);
 			}
 		}
-		log.info("count = " + count);
-		log.info(foodTruckDTOCache.size() + " approved foodtrucks cached in total");
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.hangfu.foodtruck.webservices.service.CacheService#clearCache()
+	 */
 	@Override
-	public BaseResponse clearCache(String ybyHeader, String api, String service, String dto, String metadata,
-			String type, Long propertyId) {
+	@GET
+	@Path("/clear_cache")
+	@Produces("application/json")
+	public BaseResponse clearCache() {
 
-		foodTruckDTOCache.getCacheMap().clear();
-		log.info("clear cache. cache size is now " + foodTruckDTOCache.getCacheMap().size());
+		BaseResponse response = new BaseResponse();
 
-		return null;
+		foodTruckDTOCache.clear();
+		log.info("clear foodTruckDTOCache. cache size is now " + foodTruckDTOCache.size());
+
+		foodTypeCache.clear();
+		log.info("clear foodTypeCache. cache size is now " + foodTypeCache.size());
+
+		return response;
 	}
 
-	// @Override
-	// @GET
-	// @Path("/list_cache")
-	// @Produces("application/json")
-	// public CacheResponse listCache(@HeaderParam("X-YBY-Info") String ybyHeader, @QueryParam("api") String inApi,
-	// @QueryParam("service") String inService, @QueryParam("dto") String inDto,
-	// @QueryParam("metadata") String inMetadata, @QueryParam("type") String inType) {
-	// log.info("api : " + inApi + " service : " + inService + " dto : " + inDto + " type : " + inType);
-	// CacheResponse response = new CacheResponse();
-	// List<CacheDTO> data = new ArrayList<CacheDTO>();
-	// CacheDTO cacheDTO = new CacheDTO();
-	// cacheDTO.setName("foodTruckDTOCache");
-	// cacheDTO.setMap((Map<Object, Object>) foodTruckDTOCache.getCacheMap());
-	// data.add(cacheDTO);
-	//
-	// response.setData(data);
-	// return response;
-	// }
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.hangfu.foodtruck.webservices.service.CacheService#logCacheSummary()
+	 */
 	@Override
-	public BaseResponse logCacheSummary(String ybyHeader) {
-		// TODO Auto-generated method stub
-		return null;
+	@GET
+	@Path("/log_cache_summary")
+	@Produces("application/json")
+	public BaseResponse logCacheSummary() {
+		BaseResponse response = new BaseResponse();
+
+		// Just output the length of each for output purpose
+		logCache("foodTruckDTOCache", foodTruckDTOCache);
+		logCache("foodTypeCache", foodTypeCache);
+
+		return response;
 	}
 
-	@Override
-	public CacheResponse listCache(String ybyHeader, String api, String service, String dto, String metadata,
-			String type) {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * Log the size of cache
+	 * 
+	 * @param name
+	 * @param cache
+	 */
+	private void logCache(String name, MapCache<?, ?> cache) {
+		log.info(name + " cache has " + (cache != null && cache.getCacheMap() != null ? cache.size() : null)
+				+ " entries");
 	}
 
 	public void setFoodTruckDTOCache(FoodTruckDTOCache foodTruckDTOCache) {
