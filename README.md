@@ -6,6 +6,8 @@ Trucks](https://data.sfgov.org/Permitting/Mobile-Food-Facility-Permit/rqzj-sfat)
 
 Here is the live demo : http://sleepy-tundra-5202.herokuapp.com/
 
+(Note: I use Heroku free hosting service, I found that first open the page, there is no data in cache. I guess heroku removes cache data on server if there are no traffic. Therefore, if you don't see the blue marks on map at first time you open the page, just wait for 5 seconds and refresh the page, then it should be working fine.)
+
 
 Software Used
 -------------
